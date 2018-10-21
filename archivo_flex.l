@@ -1,28 +1,31 @@
 
-TKN_NUM [0-9]+("."[0-9]+)?
-TKN_ASIGN "="
-TKN_PTOCOMA ";"
-TKN_ID [a-zA-z][a-zA-Z0-9]*un
-TKN_MULT "*"
-TKN_DIV "/"
-TKN_MAS "+"
-TKN_MENOS "-"
-TKN_PAA "("
-TKN_PAC ")"
+DIGITO          [0-9]
+NUM_ENTERO      {DIGITO}+
+NUM_REAL        {NUM_ENTERO}("."{NUM_ENTERO})?
+ID              [a-z][a-zA-Z0-9]*
+ASIGN           "="
+PTOCOMA         ";"
+MULT            "*"
+DIV             "/"
+MAS             "+"
+MENOS           "-"
+PAA             "("
+PAC             ")"
 
 %%
 
-{DIGITO}+ {printf("Encontrado TKN_NUM_ENTERO: %d",atoi(yytext));}
-{DIGITO}+"."{DIGITO}+ {printf("Encontrado TKN_NUM_REAL: %f",atof(yytext));}
-"=" {printf("Encontrado TKN_ASIGN: %s",yytext);}
-";" {printf("Encontrado TKN_PTOCOMA: %s",yytext);}
-"*" {printf("Encontrado TKN_MULT: %s",yytext);}
-"/" {printf("Encontrado TKN_DIV: %s",yytext);}
-"+" {printf("Encontrado TKN_MAS: %s",yytext);}
-"-" {printf("Encontrado TKN_MENOS: %s",yytext);}
-"(" {printf("Encontrado TKN_PAA: %s",yytext);}
-")" {printf("Encontrado TKN_PAC: %s",yytext);}
-"cos" {printf("Encontrado TKN_COS: %s",yytext);}
-"sen" {printf("Encontrado TKN_SEN: %s",yytext);}
-{ID} {printf("Encontrado TKN_ID: %s",yytext);}
-"\n" {nlines++;}
+{NUM_ENTERO}      {printf("Encontrado NUM_ENTERO: %d",atoi(yytext));}
+{NUM_REAL}        {printf("Encontrado NUM_REAL: %f",atof(yytext));}
+{ID}              {printf("Encontrado ID: %s",yytext);}
+"="               {printf("Encontrado ASIGN: %s",yytext);}
+";"               {printf("Encontrado PTOCOMA: %s",yytext);}
+"*"               {printf("Encontrado MULT: %s",yytext);}
+"/"               {printf("Encontrado DIV: %s",yytext);}
+"+"               {printf("Encontrado MAS: %s",yytext);}
+"-"               {printf("Encontrado MENOS: %s",yytext);}
+"("               {printf("Encontrado PAA: %s",yytext);}
+")"               {printf("Encontrado PAC: %s",yytext);}
+
+%%
+
+int main(){ yylex();}
