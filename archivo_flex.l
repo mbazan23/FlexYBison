@@ -1,7 +1,7 @@
-
-DIGITO          [0-9]
-NUM_ENTERO      {DIGITO}+
-NUM_REAL        {NUM_ENTERO}("."{NUM_ENTERO})?
+HEXADECIMAL     0[xX][0-9a-fA-F]+
+OCTAL           0[1-7][0-7]*
+DECIMAL_ENTERO  [1-9][0-9]*
+DECIMAL_REAL    {DECIMAL_ENTERO}("."[0-9]+)?
 ID              [a-z][a-zA-Z0-9]*
 ASIGN           "="
 PTOCOMA         ";"
@@ -13,9 +13,10 @@ PAA             "("
 PAC             ")"
 
 %%
-
-{NUM_ENTERO}      {printf("Encontrado NUM_ENTERO: %d",atoi(yytext));}
-{NUM_REAL}        {printf("Encontrado NUM_REAL: %f",atof(yytext));}
+{HEXADECIMAL}     {printf("Encontrado HEXADECIMAL: %s",atoi(yytext));}
+{OCTAL}           {printf("Encontrado OCTAL: %d",atoi(yytext));}
+{DECIMAL_ENTERO}  {printf("Encontrado DECIMAL_ENTERO: %d",atoi(yytext));}
+{DECIMAL_REAL}    {printf("Encontrado DECIMAL_REAL: %f",atof(yytext));}
 {ID}              {printf("Encontrado ID: %s",yytext);}
 "="               {printf("Encontrado ASIGN: %s",yytext);}
 ";"               {printf("Encontrado PTOCOMA: %s",yytext);}
