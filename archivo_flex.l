@@ -1,32 +1,20 @@
-HEXADECIMAL     0[xX][0-9a-fA-F]+
-OCTAL           0[1-7][0-7]*
-DECIMAL_ENTERO  [1-9][0-9]*
-DECIMAL_REAL    {DECIMAL_ENTERO}("."[0-9]+)?
-ID              [a-z][a-zA-Z0-9]*
-ASIGN           "="
-PTOCOMA         ";"
-MULT            "*"
-DIV             "/"
-MAS             "+"
-MENOS           "-"
-PAA             "("
-PAC             ")"
+%{
+#include "calculadoraInfija.tab.h"
+%}
 
-%%
-{HEXADECIMAL}     {printf("Encontrado HEXADECIMAL: %s",atoi(yytext));}
-{OCTAL}           {printf("Encontrado OCTAL: %d",atoi(yytext));}
-{DECIMAL_ENTERO}  {printf("Encontrado DECIMAL_ENTERO: %d",atoi(yytext));}
-{DECIMAL_REAL}    {printf("Encontrado DECIMAL_REAL: %f",atof(yytext));}
-{ID}              {printf("Encontrado ID: %s",yytext);}
-"="               {printf("Encontrado ASIGN: %s",yytext);}
-";"               {printf("Encontrado PTOCOMA: %s",yytext);}
-"*"               {printf("Encontrado MULT: %s",yytext);}
-"/"               {printf("Encontrado DIV: %s",yytext);}
-"+"               {printf("Encontrado MAS: %s",yytext);}
-"-"               {printf("Encontrado MENOS: %s",yytext);}
-"("               {printf("Encontrado PAA: %s",yytext);}
-")"               {printf("Encontrado PAC: %s",yytext);}
 
 %%
 
-int main(){ yylex();}
+0[0-7]* {yylval.numeroDecimal = strtol (yytext + 1, NULL, 8); return NUM;} /* Captura un octal, devuelve un decimal */
+[0-9]+(\.)?([0-9]+)?  {yylval.numeroDecimal = atof(yytext); return NUM;} /* Captura un decimal, lo devuelve */
+0[xX][0-9 a-f A-F]+  {yylval.numeroDecimal = strtol (yytext + 2, NULL, 16); return NUM;} /* Captura un hexa, devuelve un decimal */
+"+"     {return '+';}
+"-"     {return '-';}
+"*"     {return '*';}
+"/"     {return '/';}
+"^"     {return '^';} /* Los simbolos los devuelve literales para poder usarlos */
+"("     {return '(';}
+")"     {return ')';}
+"\n"    {return '\n';}
+
+%%
