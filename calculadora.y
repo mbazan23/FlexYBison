@@ -1,42 +1,52 @@
 %{
-#include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include <ctype.h>
 %}
 
-%token NUM
+%union
+{
+	float numeroDecimal;
+}
 
-%left ‘+’ ‘-’
-%left ‘*’ ‘/’
-%rigth '^'
+/* Declaraciones BISON */
 
+%token <numeroDecimal> NUM
 
-%% /* reglas gramaticales y acciones */
+%type <numeroDecimal> exp
 
-input:  | input line ;        /* vacío */
+%left '-' '+'
+%left '*' '/'
+%left NEG     /* negativo */
+%right '^'    /* exponenciacion */
 
-line:     '\n'
-        | exp '\n'  { printf ("\t %d\n", $1); }
+/* La gramatica */
+
+%%
+input:    /* vacio */
+        | input line
 ;
 
-exp:      NUM              {$$ = $1;}
-        | exp '+' exp      {$$ = $1 + $3;}
-        | exp '-' exp      {$$ = $1 - $3;}
-        | exp '*' exp      {$$ = $1 * $3;}
-        | exp '/' exp      {$$ = $1 / $3;}
-        | exp '^' exp      {$$ = pow ($1, $3);}
+line:     '\n'
+        | exp '\n'  { printf ("\t %f\n", $1); }
+;
 
+exp:      NUM                { $$ = $1;         }
+        | exp '+' exp        { $$ = $1 + $3;    }
+        | exp '-' exp        { $$ = $1 - $3;    }
+        | exp '*' exp        { $$ = $1 * $3;    }
+        | exp '/' exp        { $$ = $1 / $3;    }
+        | '-' exp  %prec NEG { $$ = -$2;        }
+        | exp '^' exp        { $$ = pow ($1, $3); }
+        | '(' exp ')'        { $$ = $2;         }
 ;
 %%
 
-void yyerror(char* s)  /* la llama el yyparse frente un error */
-{
-  printf ("Se ha producido un error sintactico %s\n", s);
-}
-
 main ()
 {
-  yyparse ();
+	printf("\n Ingrese una operacion matematica a realizar (con valores en decimal, octal o hexadecimal). Se realiza y se muestra el resultado en decimal. \n");
+ 	yyparse ();
 }
 
 
